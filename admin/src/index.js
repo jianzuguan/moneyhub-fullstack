@@ -2,6 +2,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const config = require("config")
 const axios = require("axios")
+const getCompanyName = require("./getCompanyName")
 
 const app = express()
 
@@ -12,7 +13,34 @@ app.get("/investments/:id", (req, res) => {
   axios
     .get(`${config.investmentsServiceUrl}/investments/${id}`)
     .then((response) => {
-      res.send(response.data)
+      // Assume the response is array with one element
+      const investments = response.data[0]
+      if (
+        !Array.isArray(investments.holdings) ||
+        investments.holdings.length === 0
+      ) {
+        res.send("No holdings found")
+      }
+      return investments
+    })
+    .then((investments) => {
+      const {userId, firstName, lastName, investmentTotal, date, holdings} =
+        investments
+      return holdings.map((holding) => {
+        const {id: companyId, investmentPercentage} = holding
+        const value = investmentTotal * investmentPercentage
+        return {
+          userId,
+          firstName,
+          lastName,
+          date,
+          companyId,
+          value,
+        }
+      })
+    })
+    .then((holdings) => {
+      res.json(holdings)
     })
     .catch((err) => {
       console.error(err)
