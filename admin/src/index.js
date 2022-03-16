@@ -57,6 +57,13 @@ app.get("/investments/:id", async (req, res) => {
       }, csvData)
     )
 
+    await axios({
+      method: "post",
+      url: `${config.investmentsServiceUrl}/investments/export`,
+      header: {"Content-Type": "text/csv"},
+      data: {data: csv},
+    })
+
     res.send(csv)
   } catch (err) {
     console.error(err)
