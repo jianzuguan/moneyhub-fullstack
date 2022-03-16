@@ -3,6 +3,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const axios = require("axios")
 const config = require("config")
+const {stringify} = require("csv-stringify/sync")
 const getCompanyName = require("./getCompanyName")
 
 const app = express()
@@ -48,7 +49,15 @@ app.get("/investments/:id", async (req, res) => {
 
     const csvData = await Promise.all(csvDataPromises)
 
-    res.send(csvData)
+    const csv = stringify(
+      R.map((investment) => {
+        const {userId, firstName, lastName, date, companyName, value} =
+          investment
+        return [userId, firstName, lastName, date, companyName, value]
+      }, csvData)
+    )
+
+    res.send(csv)
   } catch (err) {
     console.error(err)
     res.send(500)
