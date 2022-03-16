@@ -1,7 +1,8 @@
+const R = require("ramda")
 const express = require("express")
 const bodyParser = require("body-parser")
-const config = require("config")
 const axios = require("axios")
+const config = require("config")
 const getCompanyName = require("./getCompanyName")
 
 const app = express()
@@ -27,7 +28,7 @@ app.get("/investments/:id", async (req, res) => {
     const {userId, firstName, lastName, investmentTotal, date, holdings} =
       investments
 
-    const holdingDetails = holdings.map((holding) => {
+    const holdingDetails = R.map((holding) => {
       const {id: companyId, investmentPercentage} = holding
       const value = investmentTotal * investmentPercentage
       return {
@@ -38,8 +39,16 @@ app.get("/investments/:id", async (req, res) => {
         companyId,
         value,
       }
-    })
-    console.log(holdingDetails)
+    }, holdings)
+
+    const csvDataPromises = R.map(async function (holding) {
+      const companyName = await getCompanyName(holding.companyId)
+      return R.mergeAll([holding, {companyName}])
+    }, holdingDetails)
+
+    const csvData = await Promise.all(csvDataPromises)
+
+    res.send(csvData)
   } catch (err) {
     console.error(err)
     res.send(500)
