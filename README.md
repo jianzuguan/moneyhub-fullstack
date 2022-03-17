@@ -75,3 +75,35 @@ Financial Companies - localhost:8082
 
 Admin - localhost:8083
 - `/investments/:id` get an investment record by id
+
+## Changes
+Changes are made in the `admin` microservice.
+
+My solution expand on the `/investments/:id` endpoint.
+
+### To run tests
+1. `cd` into the `admin` microservice.
+1. `npm i` to install packages
+1. `npm run test` to run tests
+
+### How might you make this service more secure?
+- IP whitelist
+- Check staff permissions
+- Validate user input
+
+### How would you make this solution scale to millions of records?
+- Add auto scaling and load balancing
+    - Ideally, each service will have its own auto scaling group and load balancer.
+- Cache
+    - Could cache the processed data
+- Have the same microservice in different regions for redundancy
+- For database, noSQL is more suitable as it can easily scaled.
+- If using relational database, horizontal shading will help.
+
+### What else would you have liked to improve given more time?
+- Break down the code
+    - A function that convert data from `/investments/:id` to csv format would be useful.
+- Add more unit tests for the break down code
+- Integration test and end to end test for the api endpoints
+- Improve the error handling
+    - Send alert to email when there are unexpected errors
