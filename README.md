@@ -96,6 +96,11 @@ Single http package won't be able to hold millions of records.
 `holdings` need to be paginated when query from data source. Process the holdings in batches.
 Processed data can be streamed to `/export`.
 
+This is unlikely to complete within the time http request.
+I would turn this into a remote procedure call.
+The http response will confirm the request has been received.
+Message queue can be used to store the request.
+
 ### What else would you have liked to improve given more time?
 - Use `express.Router()` to break api endpoint into its own file
 - Break down the code to reduce cognitive load
