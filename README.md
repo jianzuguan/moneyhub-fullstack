@@ -107,3 +107,4 @@ My solution expand on the `/investments/:id` endpoint.
 - Integration test and end to end test for the api endpoints
 - Improve the error handling
     - Send alert to email when there are unexpected errors
+- Set up prettier to format the code
