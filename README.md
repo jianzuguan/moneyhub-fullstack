@@ -92,13 +92,9 @@ My solution expand on the `/investments/:id` endpoint.
 - Validate user input
 
 ### How would you make this solution scale to millions of records?
-- Add auto scaling and load balancing
-    - Ideally, each service will have its own auto scaling group and load balancer.
-- Cache
-    - Could cache the processed data
-- Have the same microservice in different regions for redundancy
-- For database, noSQL is more suitable as it can easily scaled.
-- If using relational database, horizontal shading will help.
+Single http package won't be able to hold millions of records.
+`holdings` need to be paginated when query from data source. Process the holdings in batches.
+Processed data can be streamed to `/export`.
 
 ### What else would you have liked to improve given more time?
 - Use `express.Router()` to break api endpoint into its own file
