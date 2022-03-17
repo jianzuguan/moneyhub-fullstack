@@ -102,8 +102,8 @@ My solution expand on the `/investments/:id` endpoint.
 
 ### What else would you have liked to improve given more time?
 - Use `express.Router()` to break api endpoint into its own file
-- Break down the code
-    - A function that convert data from `/investments/:id` to csv format would be useful.
+- Break down the code to reduce cognitive load
+    - A function that convert data from `/investments/:id` to csv format would be useful
 - Add more unit tests for the break down code
 - Integration test and end to end test for the api endpoints
 - Improve the error handling
